@@ -769,7 +769,9 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
   }
 
   public Set<String> connectionUrls() {
-    return new HashSet<>(getList(CONNECTION_URL_CONFIG));
+    return getList(CONNECTION_URL_CONFIG)
+        .stream().map(s -> s.endsWith("/") ? s.substring(0, s.length() - 1) : s)
+        .collect(Collectors.toCollection(HashSet::new));
   }
 
   public boolean dropInvalidMessage() {
@@ -890,6 +892,13 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
         } catch (URISyntaxException e) {
           throw new ConfigException(
               name, value, "The provided url '" + url + "' is not a valid url."
+          );
+        }
+        if (url.endsWith("/")) {
+          throw new ConfigException(
+              name,
+              value,
+              "The provided url '" + url + "' must not end with a forward slash."
           );
         }
       }
