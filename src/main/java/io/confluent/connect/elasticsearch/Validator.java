@@ -338,7 +338,7 @@ public class Validator {
             .builder(
                 config.connectionUrls()
                     .stream()
-                    .map(HttpHost::create)
+                    .map(HttpHost::create)//todo: strip forward slash
                     .collect(Collectors.toList())
                     .toArray(new HttpHost[config.connectionUrls().size()])
             )

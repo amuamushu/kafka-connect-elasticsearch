@@ -148,7 +148,7 @@ public class ConfigCallbackHandler implements HttpClientConfigCallback, RequestC
     CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
     if (config.isAuthenticatedConnection()) {
       config.connectionUrls().forEach(url -> credentialsProvider.setCredentials(
-              new AuthScope(HttpHost.create(url)),
+              new AuthScope(HttpHost.create(url)), // todo: strip forward slash
               new UsernamePasswordCredentials(config.username(), config.password().value())
           )
       );

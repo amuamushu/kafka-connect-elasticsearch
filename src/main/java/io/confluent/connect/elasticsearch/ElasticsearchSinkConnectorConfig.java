@@ -906,7 +906,7 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
       if (value == null) {
         throw new ConfigException(name, value, "The config must be provided and non-null.");
       }
-
+      // todo: add validation to remove slash
       List<String> urls = (List<String>) value;
       for (String url : urls) {
         try {

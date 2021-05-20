@@ -111,6 +111,15 @@ public class ElasticsearchClientTest {
   }
 
   @Test
+  public void testHelp() {
+    props.put(CONNECTION_URL_CONFIG, container.getConnectionUrl() + "/");
+    config = new ElasticsearchSinkConnectorConfig(props);
+    converter = new DataConverter(config);
+    helperClient = new ElasticsearchHelperClient(container.getConnectionUrl() + "/", config);
+
+  }
+
+  @Test
   public void testClose() {
     ElasticsearchClient client = new ElasticsearchClient(config, null);
     client.close();

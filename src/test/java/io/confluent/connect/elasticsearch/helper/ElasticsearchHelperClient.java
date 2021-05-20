@@ -40,10 +40,11 @@ public class ElasticsearchHelperClient {
   private RestHighLevelClient client;
 
   public ElasticsearchHelperClient(String url, ElasticsearchSinkConnectorConfig config) {
+    url = url.endsWith("/") ? url.substring(0, url.length()-1) : url;
     ConfigCallbackHandler configCallbackHandler = new ConfigCallbackHandler(config);
     this.client = new RestHighLevelClient(
         RestClient
-            .builder(HttpHost.create(url))
+            .builder(HttpHost.create(url)) // todo: remvoe forward slash
             .setHttpClientConfigCallback(configCallbackHandler)
             .setRequestConfigCallback(configCallbackHandler)
     );
