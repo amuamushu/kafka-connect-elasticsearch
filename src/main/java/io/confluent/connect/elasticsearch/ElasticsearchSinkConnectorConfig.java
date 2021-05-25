@@ -241,6 +241,15 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
   private static final String IGNORE_SCHEMA_TOPICS_DISPLAY = "Topics for 'Ignore Schema' mode";
   private static final String IGNORE_SCHEMA_TOPICS_DEFAULT = "";
 
+  private static final String DATA_STREAM_TIMESTAMP_MAP_CONFIG = "data.stream.timestamp.map";
+  private static final String DATA_STREAM_TIMESTAMP_MAP_DOC =
+      "Which message field to map to the @timestamp field. If multiple fields are provided, "
+          + "the first field from this configuration that also appears in the message would "
+          + "be used. This field should only be set if " + DATA_STREAM_TYPE_CONFIG + " and "
+          + DATA_STREAM_DATASET_CONFIG + " are set.";
+  private static final String DATA_STREAM_TIMESTAMP_MAP_DISPLAY = "Data stream timestamp mapper";
+  private static final String DATA_STREAM_TIMESTAMP_MAP_DEFAULT = "";
+
   public static final String DROP_INVALID_MESSAGE_CONFIG = "drop.invalid.message";
   private static final String DROP_INVALID_MESSAGE_DOC =
           "Whether to drop kafka message when it cannot be converted to output message.";
@@ -624,6 +633,16 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
             ++order,
             Width.LONG,
             IGNORE_SCHEMA_TOPICS_DISPLAY
+        ).define(
+            DATA_STREAM_TIMESTAMP_MAP_CONFIG,
+            Type.LIST,
+            DATA_STREAM_TIMESTAMP_MAP_DEFAULT,
+            Importance.LOW,
+            DATA_STREAM_TIMESTAMP_MAP_DOC,
+            DATA_CONVERSION_GROUP,
+            ++order,
+            Width.LONG,
+            DATA_STREAM_TIMESTAMP_MAP_DISPLAY
         ).define(
             DROP_INVALID_MESSAGE_CONFIG,
             Type.BOOLEAN,
