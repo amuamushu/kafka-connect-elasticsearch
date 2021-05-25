@@ -241,7 +241,7 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
   private static final String IGNORE_SCHEMA_TOPICS_DISPLAY = "Topics for 'Ignore Schema' mode";
   private static final String IGNORE_SCHEMA_TOPICS_DEFAULT = "";
 
-  private static final String DATA_STREAM_TIMESTAMP_MAP_CONFIG = "data.stream.timestamp.map";
+  public static final String DATA_STREAM_TIMESTAMP_MAP_CONFIG = "data.stream.timestamp.map";
   private static final String DATA_STREAM_TIMESTAMP_MAP_DOC =
       "Which message field to map to the @timestamp field. If multiple fields are provided, "
           + "the first field from this configuration that also appears in the message would "
@@ -889,6 +889,10 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
 
   public DataStreamType dataStreamType() {
     return DataStreamType.valueOf(getString(DATA_STREAM_TYPE_CONFIG).toUpperCase());
+  }
+
+  public List<String> dataStreamTimestampMap() {
+    return getList(DATA_STREAM_TIMESTAMP_MAP_CONFIG);
   }
 
   public long flushTimeoutMs() {
