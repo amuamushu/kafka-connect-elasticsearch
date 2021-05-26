@@ -171,7 +171,7 @@ public class Validator {
           DATA_STREAM_TYPE_CONFIG,
           DATA_STREAM_DATASET_CONFIG
       );
-      addErrorMessage(BEHAVIOR_ON_NULL_VALUES_CONFIG, errorMessage);
+      addErrorMessage(DATA_STREAM_TIMESTAMP_MAP_CONFIG, errorMessage);
     }
   }
 

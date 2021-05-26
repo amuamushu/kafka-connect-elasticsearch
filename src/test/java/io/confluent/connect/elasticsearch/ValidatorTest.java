@@ -22,6 +22,7 @@ import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfi
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.CONNECTION_URL_CONFIG;
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.CONNECTION_USERNAME_CONFIG;
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.DATA_STREAM_DATASET_CONFIG;
+import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.DATA_STREAM_TIMESTAMP_MAP_CONFIG;
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.DATA_STREAM_TYPE_CONFIG;
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.FLUSH_TIMEOUT_MS_CONFIG;
 import static io.confluent.connect.elasticsearch.ElasticsearchSinkConnectorConfig.IGNORE_KEY_CONFIG;
@@ -460,6 +461,27 @@ public class ValidatorTest {
     }
   }
 
+  @Test
+  public void testTimestampMappingsDataStreamSet() {
+    setDataStream();
+    props.put(DATA_STREAM_TIMESTAMP_MAP_CONFIG, "one, two, fields");
+    validator = new Validator(props, () -> mockClient);
+
+    Config result = validator.validate();
+
+    assertNoErrors(result);
+  }
+
+  @Test
+  public void testTimestampMappingsDataStreamNotSet() {
+    props.put(DATA_STREAM_TIMESTAMP_MAP_CONFIG, "one, two, fields");
+    validator = new Validator(props, () -> mockClient);
+
+    Config result = validator.validate();
+
+    assertHasErrorMessage(result, DATA_STREAM_TIMESTAMP_MAP_CONFIG, "only necessary for data streams");
+  }
+
   private static void assertHasErrorMessage(Config config, String property, String msg) {
     for (ConfigValue configValue : config.configValues()) {
       if (configValue.name().equals(property)) {
@@ -471,5 +493,10 @@ public class ValidatorTest {
 
   private static void assertNoErrors(Config config) {
     config.configValues().forEach(c -> assertTrue(c.errorMessages().isEmpty()));
+  }
+
+  private void setDataStream() {
+    props.put(DATA_STREAM_DATASET_CONFIG, "a_valid_dataset");
+    props.put(DATA_STREAM_TYPE_CONFIG, "logs");
   }
 }

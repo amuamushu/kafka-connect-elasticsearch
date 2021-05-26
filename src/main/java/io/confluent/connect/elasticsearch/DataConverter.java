@@ -207,7 +207,7 @@ public class DataConverter {
       JsonNode jsonNode = objectMapper.readTree(payload);
       for (String timestampField : config.dataStreamTimestampMap()) {
         if (jsonNode.has(timestampField)) {
-          ((ObjectNode) jsonNode).put(TIMESTAMP_FIELD, timestamp);
+          ((ObjectNode) jsonNode).put(TIMESTAMP_FIELD, jsonNode.get(timestampField).asText());
           return objectMapper.writeValueAsString(jsonNode);
         }
       }
