@@ -425,6 +425,7 @@ public class DataConverterTest {
   }
 
   @Test
+<<<<<<< HEAD
   public void testMapPayloadTimestampIfGivenOneMap() {
     String timestampFieldMap = "onefield";
     props.put(ElasticsearchSinkConnectorConfig.DATA_STREAM_TYPE_CONFIG, "logs");

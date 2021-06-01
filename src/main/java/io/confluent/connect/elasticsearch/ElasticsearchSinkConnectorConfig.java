@@ -20,6 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.kafka.common.config.AbstractConfig;
@@ -28,8 +29,6 @@ import org.apache.kafka.common.config.ConfigDef.Importance;
 import org.apache.kafka.common.config.ConfigDef.Type;
 import org.apache.kafka.common.config.ConfigDef.Validator;
 import org.apache.kafka.common.config.ConfigDef.Width;
-
-import java.util.Map;
 import org.apache.kafka.common.config.ConfigException;
 import org.apache.kafka.common.config.types.Password;
 import org.elasticsearch.common.unit.ByteSizeValue;
@@ -453,18 +452,14 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
             DATA_STREAM_TYPE_CONFIG,
             Type.STRING,
             DATA_STREAM_TYPE_DEFAULT.name(),
-            ConfigDef.CaseInsensitiveValidString.in(
-                Arrays.stream(DataStreamType.values())
-                    .map(DataStreamType::name)
-                    .collect(Collectors.toList())
-                    .toArray(new String[DataStreamType.values().length])
-            ),
+            new EnumRecommender<>(DataStreamType.class),
             Importance.LOW,
             DATA_STREAM_TYPE_DOC,
             CONNECTOR_GROUP,
             ++order,
             Width.SHORT,
-            DATA_STREAM_TYPE_DISPLAY
+            DATA_STREAM_TYPE_DISPLAY,
+            new EnumRecommender<>(DataStreamType.class)
         ).define(
             MAX_IN_FLIGHT_REQUESTS_CONFIG,
             Type.INT,
@@ -871,6 +866,7 @@ public class ElasticsearchSinkConnectorConfig extends AbstractConfig {
   public DataStreamType dataStreamType() {
     return DataStreamType.valueOf(getString(DATA_STREAM_TYPE_CONFIG).toUpperCase());
   }
+
 
   public List<String> dataStreamTimestampMap() {
     return getList(DATA_STREAM_TIMESTAMP_MAP_CONFIG);
